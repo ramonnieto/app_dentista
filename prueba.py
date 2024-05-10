@@ -41,7 +41,13 @@ else:
     print("Hola soy el doctor")
 # Qué puede hacer el doctor ? # ver los datos del cliente
 # No se puede acceder al diccionario client pq esta guardado
-
+    operation = "0"
+    while operation != "X":
+        print("\nSelect an operation, o press [X] to exit")
+        print("\t[1] Crear Cliente")
+        print("\t[2] Actualizar datos")
+        print("\t[3] Buscar Cliente")
+        operation = input("Selection: ")
 
 # Registramos en la bbdd los datos de cliente
 # db.child("clientes").push(client)
