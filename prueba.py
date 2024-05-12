@@ -1,61 +1,30 @@
 import firebase_admin
 from firebase_admin import credentials, firestore
 from pprint import pprint
-
-
-
-
-
-#import pyrebase
-
-# Configuración de Firebase
-# config = {
-#     "apiKey": "TU_API_KEY",
-#     "authDomain": "TU_DOMINIO.firebaseapp.com",
-#     "databaseURL": "https://TU_DOMINIO.firebaseio.com",
-#     "storageBucket": "TU_DOMINIO.appspot.com"
-# }
-# firebase = pyrebase.initialize_app(config)
-# db = firebase.database()
-#firebase-adminsdk-cgdgv@my-first-project---prueba.iam.gserviceaccount.com	firebase-adminsdk	
-#Correo electrónico
-#firebase-adminsdk-cgdgv@my-first-project---prueba.iam.gserviceaccount.com
-#ID único
-#113756081115723530801
-
-""" db = firestore.client()
-# Add documents with auto IDs
-data = {
-    'name': 'John Smith',
-    'age': 40,
-    'employed': True
-}
-db.collection('client').add(data) """
-
+#from FirestoreDB import FirestoreClient
+#db.collection('client').add(data) 
 
 cred = credentials.Certificate("token_app_clinic.json")
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
-
-
 print("---------------------------")
 print("Bienvenido a Clinica PePe")
 print("---------------------------")
 tipo_perfil=""  # iniciamos variable
+# bucle para seccionar el perfil
 while tipo_perfil != "client" and tipo_perfil != "doctor": # bucle para definir un perfil 
     tipo_perfil=input("Que perfil ejecutar un valor client o doctor: ")
-
-#print("Estoy fuera")
 
 # Perfil client
 if tipo_perfil == "client":
     # se implementa el espacio cliente
-    print("Hola soy un cliente")
-    
+    print("#######################")
+    print("##  Espacio cliente ###")
+    print("#######################") 
     dni=input("Dame un DNI: ")
     client=db.collection("dentista pruebas").document(dni).get().to_dict()
-    if client is None:    
+    if client is None:    # Si no existe el registro
         client=dict()
         client["name_client"]=input("Dame un nombre: ")
         client["apellido_client"]=input("Dame un apellido: ")
@@ -84,24 +53,57 @@ if tipo_perfil == "client":
         if opcion == "1":
             newname = input("Introduce nuevo nombre: ")
             db.collection("dentista pruebas").document(dni).update({"name_client": newname})
-
-# la variable client se puede guardar en un archivo o en la bbdd
+        if opcion == "2":
+            newapellido = input("Introduce nuevo Apellido: ")
+            db.collection("dentista pruebas").document(dni).update({"name_client": newapellido})
+        if opcion == "3":
+            newtelf = input("Introduce nuevo Apellido: ")
+            db.collection("dentista pruebas").document(dni).update({"name_client": newtelf})
+        if opcion == "4":
+            newmail = input("Introduce nuevo Apellido: ")
+            db.collection("dentista pruebas").document(dni).update({"name_client": newmail})
+        if opcion == "5":
+            newaddress = input("Introduce nuevo Apellido: ")
+            db.collection("dentista pruebas").document(dni).update({"name_client": newaddress})
+# Mejoras: el cliente puede consultar su historial
 # perfil doctor
-
 else:
-    # Se implementa espacio doctor
-    print("Hola soy el doctor")
-# Qué puede hacer el doctor ? # ver los datos del cliente
-# No se puede acceder al diccionario client pq esta guardado
+    print("#######################")
+    print("##  Espacio Doctor  ###")
+    print("#######################")
     operation = "0"
-    while operation != "X":
-        print("\nSelect an operation, o press [X] to exit")
-        print("\t[1] Crear Cliente")
-        print("\t[2] Actualizar datos")
-        print("\t[3] Buscar Cliente")
-        if operation == "x":
-            quit()
-        operation = input("Selection: ")
+    while True:
+        print("""
+        Seleccione informacion que desea modificar:
+        1. Crear cliente
+        2. Buscar cliente
+        3. Actualizar cliente
+        4. Borrar cliente
+        5. exit
+        """)
+        opcion = input("elige una opcion: ")
+                
+        if opcion == "5":
+            exit()
+        print(f"he elegido {opcion}")
+        if opcion == "1":
+            dni=input("Introduzca el DNI: ")
+            #alta_client=db.collection("dentista pruebas").document(dni).get().to_dict()
+            alta_client=db.collection("dentista pruebas").stream()
+            for doc in alta_client:
+                print(f"{doc.id} => {doc.to_dict()}")
+            #print(alta_client)
 
+            print(alta_client)
+            if alta_client == dni:    # comprueba si existe
+                print(f"El usuario con DNI {dni} ya existe")
+        
+        else:
+            client=dict()
+            client["name_client"]=input("Dame un nombre: ")
+            client["apellido_client"]=input("Dame un apellido: ")
+            client["telf_client"]=int(input("Dame un telf: "))
+            db.collection("dentista pruebas").document(dni).set(client)
+            #print(f"DNI: {alta_dni}, Apellido: {alta_apellido}, Nombre: {alta_name}")
 # Registramos en la bbdd los datos de cliente
 # db.child("clientes").push(client)
