@@ -75,10 +75,10 @@ else:
     while True:
         print("""
         Seleccione informacion que desea modificar:
-        1. Crear cliente
-        2. Buscar cliente
-        3. Actualizar cliente
-        4. Borrar cliente
+        1. Crear Doctor
+        2. Buscar Doctor
+        3. Actualizar Doctor
+        4. Borrar Doctor
         5. exit
         """)
         opcion = input("elige una opcion: ")
@@ -88,10 +88,11 @@ else:
         print(f"he elegido {opcion}")
         if opcion == "1":
             dni=input("Introduzca el DNI: ")
-            #alta_client=db.collection("dentista pruebas").document(dni).get().to_dict()
             alta_client=db.collection("dentista pruebas").stream()
             for doc in alta_client:
-                print(f"{doc.id} => {doc.to_dict()}")
+                #print(f"{doc.id} => {doc.to_dict()}")
+                if doc.id == dni:
+                    print("El usuario existe")
             #print(alta_client)
 
             print(alta_client)

@@ -56,5 +56,5 @@ data = {
     'age': 40
 }
 dBclient.create(data)
-pprint(dBclient.get(data['id']))
+print(dBclient.get(data['id']))
     
